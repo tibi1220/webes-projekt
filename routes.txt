@@ -1,0 +1,6 @@
+"/"              - Homepage, products
+"/product/{:id}" - Product details (name, price, description + reviews)
+"/about"         - About us
+"/profile"       - User profile (name, email, orders)
+"/cart"          - Shopping cart (procuts in a table) 
+"/order/{:id}"   - Order details (order id, products, total price)
