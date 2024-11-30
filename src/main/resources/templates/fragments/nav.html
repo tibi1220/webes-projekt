@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <body>
-    Navigation goes here
+    <nav class="bg-blue-100 h-[56px] p-4">
+      <div class="h-full w-full flex">
+        <h1>
+          <a class="underline cursor-link" href="/">Webshop</a>
+        </h1>
+        <div class="flex-1"></div>
+        <div>
+          <ul class="flex gap-2">
+            <li>
+              <a class="underline cursor-link px-2" href="/profile">Profile</a>
+            </li>
+            <li>
+              <a class="px-2 relative" href="/cart">
+                <i class="fa-solid fa-cart-shopping fa-user"></i>
+                <span
+                  class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5"
+                >
+                  3
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </body>
 </html>

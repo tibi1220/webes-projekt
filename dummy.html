@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5hs3df2aepkpnar7uiohba+lrsjnem2eckwxuixc1q/flycgtbnapwxb4tp889k5t5ju8fs4b1p5z/ib4nmfsq=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="flex flex-col gap-4">
+    <nav class="bg-blue-100 h-[56px] p-4">
+      <div class="h-full w-full flex">
+        <h1>
+          <a class="underline cursor-link" href="/">Webshop</a>
+        </h1>
+        <div class="flex-1"></div>
+        <div>
+          <a class="underline cursor-link px-2" href="/profile">Profile</a>
+          <a class="px-2" href="/cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)]">
+      <h2 class="text-3xl font-bold pb-8">products:</h2>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=1" alt="product-1" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=2" alt="product-2" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=3" alt="product-3" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=4" alt="product-4" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=5" alt="product-5" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-blue-100 overflow-hidden">
+          <img src="https://picsum.photos/200/100?id=6" alt="product-6" />
+          <a
+            class="text-xl font-bold px-4 text-center underline cursor-link"
+            href="#"
+            >termék 1</a
+          >
+          <p class="text-center pb-4">$19.99</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-blue-100 p-4 h-[200px]">Some footer goes here</footer>
+  </body>
+</html>

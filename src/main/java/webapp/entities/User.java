@@ -30,10 +30,10 @@ public class User {
   private String password;
 
   // Getters and Setters
-  public long getId() {
+  public long getUserId() {
     return userId;
   }
-  public void setId(long id) {
+  public void setUserId(long id) {
     this.userId = id;
   }
 

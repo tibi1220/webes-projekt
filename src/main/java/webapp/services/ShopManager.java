@@ -1,5 +1,8 @@
 package webapp.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,18 +36,21 @@ public class ShopManager {
   }
 
   // User
-  public Iterable<User> getUsers() {
-    return userRepository.findAll();
+  public Optional<User> getUserByUsername(String username) {
+    return userRepository.findByUsername(username);
   }
 
   // Product
   public Iterable<Product> getProducts() {
     return productRepository.findAll();
   }
+  public Product getProductById(Long id) {
+    return productRepository.findById(id).orElse(null);
+  }
 
   // CartItem
-  public Iterable<CartItem> getCartItems() {
-    return cartItemRepository.findAll();
+  public List<CartItem> getCartItemsByUserId(long userId) {
+    return cartItemRepository.findByUser_UserId(userId);
   }
 
   // Review

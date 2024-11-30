@@ -35,6 +35,13 @@ public class CartItem {
     this.product = product;
   }
 
+  public User getUser() {
+    return user;
+  }
+  public void setUser(User user) {
+    this.user = user;
+  }
+
   public int getQuantity() {
     return quantity;
   }

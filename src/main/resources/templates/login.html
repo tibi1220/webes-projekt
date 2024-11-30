@@ -2,16 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    />
   </head>
   <body>
-    <form th:action="@{/login}" method="post">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required />
+    <nav th:replace="fragments/nav.html :: nav"></nav>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
+    <main
+      class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)] sm:flex sm:items-center sm:justify-center"
+    >
+      <form
+        class="w-full max-w-xl p-4 sm:border-2 rounded-xl flex flex-col gap-8"
+        th:action="@{/login}"
+        method="post"
+      >
+        <h1 class="font-bold text-3xl pb-4 border-b-2">Login</h1>
 
-      <button type="submit">Login</button>
-    </form>
+        <div class="flex flex-col gap-2">
+          <label for="username" class="text-lg font-semibold">Username</label>
+          <input
+            class="rounded border-2 h-10 p-2 border-gray-300"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="username"
+            autocomplete="username"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="password" class="text-lg font-semibold">Password</label>
+          <input
+            type="password"
+            id="password"
+            autocomplete="current-password"
+            class="rounded border-2 h-10 p-2 border-gray-300"
+            name="password"
+            placeholder="********"
+            required
+          />
+        </div>
+
+        <div>
+          <button
+            class="block w-full p-2 bg-blue-100 rounded hover:bg-blue-200 transition-colors"
+            type="submit"
+          >
+            Login
+          </button>
+        </div>
+
+        <div class="flex justify-center text-sm font-gray-500">
+          <p>
+            <span> Don't have an account yet? </span>
+            <a class="underline cursor-pointer" href="/register"
+              >Register here</a
+            >
+          </p>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="fragments/footer.html :: footer"></footer>
   </body>
 </html>

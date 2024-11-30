@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta charset="UTF-8" />
-    <title>Error</title>
+    <title>Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    />
   </head>
   <body>
-    <h1>An error occurred. Please try again later.</h1>
+    <nav th:replace="fragments/nav.html :: nav"></nav>
+
+    <main
+      class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)] md:flex items-center justify-center"
+    >
+      <div class="space-y-4">
+        <h1 class="text-3xl font-bold">
+          <span class="mb-4 border-b-4">Error</span>
+        </h1>
+        <p class="text-xl">An error occurred. Please try again later.</p>
+        <p>Go to the <a href="/" class="underline cursor-link">Homepage</a></p>
+      </div>
+    </main>
+
+    <footer th:replace="fragments/footer.html :: footer"></footer>
   </body>
 </html>

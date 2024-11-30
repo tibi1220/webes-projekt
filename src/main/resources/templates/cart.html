@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>User Profile</title>
+    <title>Product</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -13,16 +13,7 @@
     <nav th:replace="fragments/nav.html :: nav"></nav>
 
     <main class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)]">
-      <h1 class="text-3xl font-bold pb-8 mt-8">Profile Page</h1>
-
-      <form action="/logout" method="post">
-        <button
-          type="submit"
-          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Logout
-        </button>
-      </form>
+      <h1 class="text-3xl font-bold pb-8 mt-8">Cart</h1>
     </main>
 
     <footer th:replace="fragments/footer.html :: footer"></footer>

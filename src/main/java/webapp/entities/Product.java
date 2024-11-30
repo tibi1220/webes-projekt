@@ -31,10 +31,10 @@ public class Product {
   private BigDecimal price;
 
   // Getters and Setters
-  public long getId() {
+  public long getProductId() {
     return productId;
   }
-  public void setId(long id) {
+  public void setProductId(long id) {
     this.productId = id;
   }
 
