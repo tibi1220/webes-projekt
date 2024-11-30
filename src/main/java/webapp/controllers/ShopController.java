@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import webapp.entities.CartItem;
 import webapp.entities.Product;
 import webapp.entities.User;
+import webapp.services.AuthService;
 import webapp.services.ShopManager;
 
 @Controller
@@ -24,22 +25,42 @@ public class ShopController {
   public ShopController(ShopManager shopManager) {
     this.shopManager = shopManager;
   }
-
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static pages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   @GetMapping("/about")
-  public String about() {
+  public String about(
+    Model model
+  ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
     return "about";
   }
 
   @GetMapping("/terms")
-  public String terms() {
+  public String terms(
+    Model model
+  ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
     return "terms";
   }
 
   @GetMapping("/privacy-policy")
-  public String privacyPolicy() {
+  public String privacyPolicy(
+    Model model
+  ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
     return "privacy-policy";
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Home: Products ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   @GetMapping("/")
   public String homepage(
     Model model
@@ -48,23 +69,60 @@ public class ShopController {
     Iterable<Product> products = shopManager.getProducts();
     model.addAttribute("products", products);
 
-    System.out.println(products);
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
 
-    // Auth
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.isAuthenticated()) {
-      String username = authentication.getName();
-      boolean isLoggedIn = username != "anonymousUser";
-      
-      model.addAttribute("username", isLoggedIn ? username : null);  // Pass the username to the model
-    }
     return "index";  // Name of the homepage template
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Product Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  @GetMapping("/product/{productId}")
+  public String product(
+    @PathVariable("productId") long productId,
+    // @Valid Product product,
+    // BindingResult result,
+    Model model
+  ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
+    Product product = shopManager.getProductById(productId);
+
+    if (product == null) {
+      return "redirect:/";
+    }
+
+    System.out.println(product.getName());
+
+    model.addAttribute("product", product);
+    return "product";
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User Profile ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  @GetMapping("/profile")
+  public String profile(
+    Model model
+  ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
+    return "profile";
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shopping cart ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   @GetMapping("/cart")
   public String cart(
     Model model
   ) {
+    AuthService auth = new AuthService(shopManager);
+    model.addAttribute("auth", auth);
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
 
@@ -82,24 +140,5 @@ public class ShopController {
     }
 
     return "cart";
-  }
-
-  @GetMapping("/product/{productId}")
-  public String product(
-    @PathVariable("productId") long productId,
-    // @Valid Product product,
-    // BindingResult result,
-    Model model
-  ) {
-    Product product = shopManager.getProductById(productId);
-
-    if (product == null) {
-      return "redirect:/";
-    }
-
-    System.out.println(product.getName());
-
-    model.addAttribute("product", product);
-    return "product";
   }
 }

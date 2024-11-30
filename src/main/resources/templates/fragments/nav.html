@@ -7,20 +7,31 @@
           <a class="underline cursor-link" href="/">Webshop</a>
         </h1>
         <div class="flex-1"></div>
-        <div>
+        <div th:object="${auth}">
           <ul class="flex gap-2">
-            <li>
+            <!-- Logged In -->
+            <li th:if="*{isLoggedIn}">
               <a class="underline cursor-link px-2" href="/profile">Profile</a>
             </li>
-            <li>
+            <li th:if="*{isLoggedIn}">
               <a class="px-2 relative" href="/cart">
                 <i class="fa-solid fa-cart-shopping fa-user"></i>
                 <span
                   class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5"
+                  th:text="*{cartItems}"
                 >
-                  3
                 </span>
               </a>
+            </li>
+
+            <!-- Not logged in -->
+            <li th:unless="*{isLoggedIn}">
+              <a class="underline cursor-link px-2" href="/login">Login</a>
+            </li>
+            <li th:unless="*{isLoggedIn}">
+              <a class="underline cursor-link px-2" href="/register"
+                >Register</a
+              >
             </li>
           </ul>
         </div>
