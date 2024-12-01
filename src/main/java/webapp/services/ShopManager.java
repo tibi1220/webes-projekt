@@ -117,8 +117,8 @@ public class ShopManager {
   public Iterable<Review> getProductReviews(long productId) {
     return reviewRepository.findByProduct_ProductId(productId);
   }
-  public Iterable<Review> getUserReviews(long productId) {
-    return reviewRepository.findByProduct_ProductId(productId);
+  public Iterable<Review> getUserReviews(long userId) {
+    return reviewRepository.findByUser_UserId(userId);
   }
   public void addReview(Review review) {
     reviewRepository.save(review);
