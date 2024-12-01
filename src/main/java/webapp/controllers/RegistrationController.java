@@ -1,6 +1,8 @@
 package webapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,19 @@ public class RegistrationController {
 
   @GetMapping("/register")
   public String showRegistrationForm(Model model) {
+    // Check if user is already logged in
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (
+      authentication != null &&
+      authentication.isAuthenticated() &&
+      !"anonymousUser".equals(authentication.getName())
+    ) {
+      // Redirect to home page if user is already logged in
+      return "redirect:/";
+    }
+
+    // Show registration form otherwise
     model.addAttribute("user", new User());
     return "register";
   }
