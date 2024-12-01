@@ -23,6 +23,7 @@
           <form
             action="post"
             th:action="@{/cart/add/{id}(id=${product.productId})}"
+            th:if="${auth.user}"
           >
             <button
               type="submit"
@@ -46,13 +47,17 @@
         <hr />
 
         <h2 class="text-xl font-semibold">Customer reviews</h2>
-        <!-- Iterate over reviews -->
+
+        <!-- Only if no reviews -->
+        <p th:if="${reviews.size() == 0}" class="text-gray-500">
+          No reviews found.
+        </p>
+
         <div
           th:each="review : ${reviews}"
           class="bg-gray-50 p-4 rounded-md space-y-2"
         >
           <div class="flex items-center space-x-1 mb-2">
-            <!-- Display the rating as stars -->
             <span th:each="i : ${#numbers.sequence(1, 5)}">
               <i
                 class="fa fa-star"
@@ -70,67 +75,69 @@
           </p>
         </div>
 
-        <hr />
+        <th:block th:if="${auth.user}">
+          <hr />
 
-        <h2 class="text-xl font-semibold">Write your own review</h2>
+          <h2 class="text-xl font-semibold">Write your own review</h2>
 
-        <form
-          th:action="@{/product/{id}/submitReview(id=${product.productId})}"
-          th:object="${newReview}"
-          method="post"
-          class="space-y-4"
-        >
-          <div>
-            <label for="title" class="block text-sm font-semibold mb-2"
-              >Title</label
-            >
-            <input
-              type="text"
-              id="title"
-              th:field="*{title}"
-              class="rounded border-2 h-10 p-2 border-gray-300 w-full"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="content" class="block text-sm font-semibold mb-2"
-              >Content</label
-            >
-            <textarea
-              id="content"
-              th:field="*{content}"
-              class="rounded border-2 p-2 border-gray-300 w-full"
-              rows="4"
-              required
-            ></textarea>
-          </div>
-
-          <div>
-            <label for="rating" class="block text-sm font-semibold mb-2"
-              >Rating</label
-            >
-            <select
-              id="rating"
-              th:field="*{rating}"
-              class="rounded border-2 h-10 p-2 border-gray-300 w-full"
-              required
-            >
-              <option value="1">1 - Poor</option>
-              <option value="2">2 - Fair</option>
-              <option value="3">3 - Good</option>
-              <option value="4">4 - Very Good</option>
-              <option value="5">5 - Excellent</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            class="block w-full p-2 bg-blue-100 rounded hover:bg-blue-200 transition-colors"
+          <form
+            th:action="@{/product/{id}/submitReview(id=${product.productId})}"
+            th:object="${newReview}"
+            method="post"
+            class="space-y-4"
           >
-            Submit Review
-          </button>
-        </form>
+            <div>
+              <label for="title" class="block text-sm font-semibold mb-2"
+                >Title</label
+              >
+              <input
+                type="text"
+                id="title"
+                th:field="*{title}"
+                class="rounded border-2 h-10 p-2 border-gray-300 w-full"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="content" class="block text-sm font-semibold mb-2"
+                >Content</label
+              >
+              <textarea
+                id="content"
+                th:field="*{content}"
+                class="rounded border-2 p-2 border-gray-300 w-full"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+
+            <div>
+              <label for="rating" class="block text-sm font-semibold mb-2"
+                >Rating</label
+              >
+              <select
+                id="rating"
+                th:field="*{rating}"
+                class="rounded border-2 h-10 p-2 border-gray-300 w-full"
+                required
+              >
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              class="block w-full p-2 bg-blue-100 rounded hover:bg-blue-200 transition-colors"
+            >
+              Submit Review
+            </button>
+          </form>
+        </th:block>
       </div>
     </main>
 

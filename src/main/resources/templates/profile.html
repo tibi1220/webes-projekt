@@ -54,6 +54,11 @@
 
       <h2 class="text-xl font-semibold">Previous Orders</h2>
 
+      <!-- Only if no orders -->
+      <p th:if="${orders.size() == 0}" class="text-gray-500">
+        No orders found.
+      </p>
+
       <div
         th:each="order, iterStat : ${orders}"
         class="bg-gray-50 p-4 rounded-md space-y-2"
@@ -115,6 +120,11 @@
       <hr />
 
       <h2 class="text-xl font-semibold">User Reviews</h2>
+
+      <!-- Only if no reviews -->
+      <p th:if="${orders.size() == 0}" class="text-gray-500">
+        No reviews found.
+      </p>
 
       <div
         th:each="review : ${reviews}"

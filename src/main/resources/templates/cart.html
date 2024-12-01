@@ -15,7 +15,11 @@
     <main class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)]">
       <h1 class="text-3xl font-bold pb-8 mt-8">Cart</h1>
 
-      <table class="min-w-full bg-white border border-gray-200">
+      <!-- Display only if there are items -->
+      <table
+        th:if="${cartItems.size() > 0}"
+        class="min-w-full bg-white border border-gray-200"
+      >
         <thead>
           <tr>
             <th class="py-2 px-4 border-b text-left">Product</th>
@@ -88,6 +92,14 @@
           </tr>
         </tfoot>
       </table>
+
+      <!-- Display only if there are no items -->
+      <div th:unless="${cartItems.size() > 0}" class="text-center space-y-4">
+        <p class="text-xl">No items in the cart</p>
+        <p>
+          <a href="/" class="underline cursor-link">Continue Shopping</a>
+        </p>
+      </div>
     </main>
 
     <footer th:replace="fragments/footer.html :: footer"></footer>
