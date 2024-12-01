@@ -67,11 +67,11 @@ INSERT INTO "review" (rating, title, content, created_at, user_id, product_id) V
   (3, 'Could Be Better', 'It’s decent, but there are a few issues that need addressing.', '2024-11-23 09:05:00', 20, 10);
 
 INSERT INTO "cart_item" (product_id, user_id, quantity) VALUES 
-  (2, 1, 2),  -- User 1 has 2 units of Product 1 in their cart
-  (2, 2, 1),  -- User 2 has 1 unit of Product 2 in their cart
-  (2, 3, 5),  -- User 3 has 5 units of Product 3 in their cart
-  (2, 4, 3),  -- User 4 has 3 units of Product 4 in their cart
-  (2, 5, 2),  -- User 5 has 2 units of Product 5 in their cart
+  (1, 1, 2),  -- User 1 has 2 units of Product 1 in their cart
+  (2, 1, 1),  -- User 2 has 1 unit of Product 2 in their cart
+  (3, 1, 5),  -- User 3 has 5 units of Product 3 in their cart
+  (4, 1, 3),  -- User 4 has 3 units of Product 4 in their cart
+  (5, 1, 2),  -- User 5 has 2 units of Product 5 in their cart
   (3, 6, 1),  -- User 6 has 1 unit of Product 6 in their cart
   (3, 7, 4),  -- User 7 has 4 units of Product 7 in their cart
   (3, 8, 2),  -- User 8 has 2 units of Product 8 in their cart

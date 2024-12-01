@@ -21,4 +21,23 @@ public class CartItemService {
       .mapToInt(CartItem::getQuantity)
       .sum();
   }
+
+  public List<CartItem> getUserCartItems(long userId) {
+    return cartItemRepository.findByUser_UserId(userId);
+  }
+
+  public void updateCartItems(List<CartItem> cartItem) {
+    cartItemRepository.saveAll(cartItem);
+  }
+  
+
+  // Delete all items of a user
+  public void deleteAllCartItems(long userId) {
+    cartItemRepository.deleteByUser_UserId(userId);
+  }
+
+  // Delete a specific item of a user
+  public void deleteCartItem(long userId, long productId) {
+    cartItemRepository.deleteByUser_UserIdAndProduct_ProductId(userId, productId);
+  }
 }

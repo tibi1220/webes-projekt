@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Product</title>
+    <title>Product Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -17,44 +17,123 @@
       class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)]"
     >
       <div class="space-y-4">
-        <h1 class="text-2xl" th:text="*{name}"></h1>
+        <div class="flex justify-between pb-8 mt-8">
+          <h1 class="text-3xl font-bold" th:text="*{name}"></h1>
 
+          <form
+            action="post"
+            th:action="@{/cart/add/{id}(id=${product.productId})}"
+          >
+            <button
+              type="submit"
+              class="p-2 bg-blue-100 rounded hover:bg-blue-200 transition-colors"
+            >
+              Add to Cart
+            </button>
+          </form>
+        </div>
+
+        <hr />
+
+        <h2 class="text-xl font-semibold">Description</h2>
         <p th:text="*{description}"></p>
 
-        <form action="/add-to-cart" method="post">
-          <div class="space-x-4">
-            <label for="quantity">Quantity</label>
-            <input
-              id="quantity"
-              min="1"
-              step="1"
-              max="10"
-              placeholder="1"
-              type="number"
-              value="1"
-            />
-            x
-            <span>$<span id="price" th:text="${product.price}"></span></span>
-            =
-            <span>$<span id="total" th:text="${product.price}"></span></span>
+        <hr />
+
+        <h2 class="text-xl font-semibold">Price</h2>
+        <p>$<span th:text="*{price}"></span></p>
+
+        <hr />
+
+        <h2 class="text-xl font-semibold">Customer reviews</h2>
+        <!-- Iterate over reviews -->
+        <div
+          th:each="review : ${reviews}"
+          class="bg-gray-50 p-4 rounded-md space-y-2"
+        >
+          <div class="flex items-center space-x-1 mb-2">
+            <!-- Display the rating as stars -->
+            <span th:each="i : ${#numbers.sequence(1, 5)}">
+              <i
+                class="fa fa-star"
+                th:classappend="${i <= review.rating} ? 'text-yellow-500' : 'text-gray-300'"
+              ></i>
+            </span>
           </div>
 
-          <button>Add to cart</button>
+          <h3 class="font-semibold" th:text="${review.title}"></h3>
+          <p th:text="${review.content}"></p>
+
+          <p class="text-sm">
+            Written by
+            <span th:text="${review.user.username}"></span>
+          </p>
+        </div>
+
+        <hr />
+
+        <h2 class="text-xl font-semibold">Write your own review</h2>
+
+        <form
+          th:action="@{/product/{id}/submitReview(id=${product.productId})}"
+          th:object="${newReview}"
+          method="post"
+          class="space-y-4"
+        >
+          <div>
+            <label for="title" class="block text-sm font-semibold mb-2"
+              >Title</label
+            >
+            <input
+              type="text"
+              id="title"
+              th:field="*{title}"
+              class="rounded border-2 h-10 p-2 border-gray-300 w-full"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="content" class="block text-sm font-semibold mb-2"
+              >Content</label
+            >
+            <textarea
+              id="content"
+              th:field="*{content}"
+              class="rounded border-2 p-2 border-gray-300 w-full"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="rating" class="block text-sm font-semibold mb-2"
+              >Rating</label
+            >
+            <select
+              id="rating"
+              th:field="*{rating}"
+              class="rounded border-2 h-10 p-2 border-gray-300 w-full"
+              required
+            >
+              <option value="1">1 - Poor</option>
+              <option value="2">2 - Fair</option>
+              <option value="3">3 - Good</option>
+              <option value="4">4 - Very Good</option>
+              <option value="5">5 - Excellent</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            class="block w-full p-2 bg-blue-100 rounded hover:bg-blue-200 transition-colors"
+          >
+            Submit Review
+          </button>
         </form>
       </div>
     </main>
 
     <footer th:replace="fragments/footer.html :: footer"></footer>
-    <script>
-      // Update total price when quantity changes
-      const quantity = document.getElementById("quantity");
-      const price = document.getElementById("price");
-      const total = document.getElementById("total");
-
-      quantity.addEventListener("input", () => {
-        total.innerText =
-          Math.round(100 * quantity.value * price.innerText) / 100;
-      });
-    </script>
   </body>
 </html>

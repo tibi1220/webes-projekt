@@ -36,6 +36,9 @@ public class ShopManager {
   }
 
   // User
+  public User getUserById(long id) {
+    return userRepository.findById(id).orElse(null);
+  }
   public Optional<User> getUserByUsername(String username) {
     return userRepository.findByUsername(username);
   }
@@ -52,10 +55,22 @@ public class ShopManager {
   public List<CartItem> getCartItemsByUserId(long userId) {
     return cartItemRepository.findByUser_UserId(userId);
   }
+  public void updateCartItems(List<CartItem> cartItems) {
+    cartItemRepository.saveAll(cartItems);
+  }
+  public void deleteAllCartItems(long userId) {
+    cartItemRepository.deleteByUser_UserId(userId);
+  }
+  public void deleteCartItem(long userId, long productId) {
+    cartItemRepository.deleteByUser_UserIdAndProduct_ProductId(userId, productId);
+  }
 
   // Review
-  public Iterable<Review> getReviews() {
-    return reviewRepository.findAll();
+  public Iterable<Review> getProductReview(long productId) {
+    return reviewRepository.findByProduct_ProductId(productId);
+  }
+  public void saveReview(Review review) {
+    reviewRepository.save(review);
   }
 
   // Order

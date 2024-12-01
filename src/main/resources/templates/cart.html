@@ -14,6 +14,80 @@
 
     <main class="p-4 mx-auto max-w-6xl w-full min-h-[calc(100vh-56px)]">
       <h1 class="text-3xl font-bold pb-8 mt-8">Cart</h1>
+
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b text-left">Product</th>
+            <th class="py-2 px-4 border-b">Price</th>
+            <th class="py-2 px-4 border-b">Quantity</th>
+            <th class="py-2 px-4 border-b">Total</th>
+            <th class="py-2 px-4 border-b">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center" th:each="cartItem : ${cartItems}">
+            <td class="py-2 px-4 border-b text-left">
+              <a
+                class="underline cursor-link"
+                th:href="@{/product/{productId}(productId=${cartItem.product.productId})}"
+                th:text="${cartItem.product.name}"
+              ></a>
+            </td>
+            <td class="py-2 px-4 border-b">
+              $<span
+                th:id="'price-' + ${cartItem.product.productId}"
+                th:text="${cartItem.product.price}"
+              ></span>
+            </td>
+            <td class="py-2 px-4 border-b">
+              <input
+                type="number"
+                th:value="${cartItem.quantity}"
+                th:id="'count-' + ${cartItem.product.productId}"
+                value="1"
+                min="1"
+                max="10"
+                step="1"
+                class="w-16"
+              />
+            </td>
+            <td class="py-2 px-4 border-b">
+              $<span
+                th:id="'total-' + ${cartItem.product.productId}"
+                th:text="|${cartItem.product.price * cartItem.quantity}|"
+              ></span>
+            </td>
+            <td class="py-2 px-4 border-b">
+              <form
+                th:action="@{/cart/remove/{productId}(productId=${cartItem.product.productId})}"
+                method="post"
+              >
+                <button class="rounded bg-red-500 w-8 h-8">
+                  <i class="fas fa-trash text-white"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="py-2 px-4 border-b font-bold">Total</td>
+
+            <td class="py-2 px-4 border-b text-center">
+              $<span th:text="${total}"></span>
+            </td>
+
+            <td class="py-2 px-4 border-b text-center">
+              <form th:action="@{/cart/remove-all}" method="post">
+                <button class="rounded bg-red-500 w-8 h-8">
+                  <i class="fas fa-trash text-white"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </main>
 
     <footer th:replace="fragments/footer.html :: footer"></footer>

@@ -1,11 +1,9 @@
 package webapp.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import webapp.entities.CartItem;
 import webapp.entities.Product;
-import webapp.entities.User;
+import webapp.entities.Review;
 import webapp.services.AuthService;
 import webapp.services.ShopManager;
 
@@ -94,9 +92,13 @@ public class ShopController {
       return "redirect:/";
     }
 
-    System.out.println(product.getName());
-
     model.addAttribute("product", product);
+    
+    Iterable<Review> reviews = shopManager.getProductReview(productId);
+
+    model.addAttribute("reviews", reviews);
+    model.addAttribute("newReview", new Review());
+
     return "product";
   }
 
@@ -123,22 +125,21 @@ public class ShopController {
     Model model
   ) {
     model.addAttribute("auth", auth);
+    long userId = auth.getUserId();
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
+    List<CartItem> cartItems = shopManager.getCartItemsByUserId(userId);
+    model.addAttribute("cartItems", cartItems);
 
-    Optional<User> user = shopManager.getUserByUsername(username);
+    BigDecimal total = cartItems
+      .stream()
+      .map(cartItem -> cartItem
+        .getProduct()
+        .getPrice()
+        .multiply(BigDecimal.valueOf(cartItem.getQuantity()))
+      )
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    if (user.isEmpty()) {
-      return "redirect:/";
-    } else {
-      List<CartItem> cartItems = shopManager.getCartItemsByUserId(user.get().getUserId());
-
-      System.out.println(
-        "\n\n\n --------- Debugging cartItems --------- \n\n\n" +
-        cartItems.get(0).getQuantity()
-      );
-    }
+    model.addAttribute("total", total);
 
     return "cart";
   }
