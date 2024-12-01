@@ -114,6 +114,12 @@ public class ShopController {
     
     Iterable<Review> reviews = shopManager.getProductReviews(productId);
 
+    // Sort reviews by date
+    reviews = StreamSupport
+      .stream(reviews.spliterator(), false)
+      .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+      .collect(Collectors.toList());
+
     model.addAttribute("reviews", reviews);
     model.addAttribute("newReview", new Review());
 
@@ -144,9 +150,23 @@ public class ShopController {
     model.addAttribute("auth", auth);
 
     Iterable<Review> reviews = shopManager.getUserReviews(auth.getUserId());
+
+    // Sort reviews by date
+    reviews = StreamSupport
+      .stream(reviews.spliterator(), false)
+      .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+      .collect(Collectors.toList());
+
     model.addAttribute("reviews", reviews);
 
     Iterable<Order> orders = shopManager.getUserOrders(auth.getUserId());
+    
+    // Sort orders by date
+    orders = StreamSupport
+      .stream(orders.spliterator(), false)
+      .sorted((a, b) -> b.getOrderDate().compareTo(a.getOrderDate()))
+      .collect(Collectors.toList());
+
     model.addAttribute("orders", orders);
     
     List<BigDecimal> totals = StreamSupport
@@ -172,6 +192,9 @@ public class ShopController {
     long userId = auth.getUserId();
 
     List<CartItem> cartItems = shopManager.getCartItemsByUserId(userId);
+    // Sort items in alphabetical order based on product name
+    cartItems.sort((a, b) -> a.getProduct().getName().compareTo(b.getProduct().getName()));
+
     model.addAttribute("cartItems", cartItems);
 
     BigDecimal total = cartItems
@@ -233,6 +256,22 @@ public class ShopController {
     return "redirect:/cart";
   }
 
+  @PostMapping("/cart/update/{productId}/{quantity}")
+  public String update(
+    @PathVariable("productId") long productId,
+    @PathVariable("quantity") int quantity
+  ) {
+    shopManager.updateCartItemQuantity(
+      auth.getUserId(), 
+      productId,
+      quantity,
+      false
+    );
+
+    return "redirect:/cart";
+  }
+
+
   @PostMapping("/cart/remove/{productId}")
   public String deleteCartItem(
     @PathVariable("productId") long productId,
@@ -255,4 +294,13 @@ public class ShopController {
     return "redirect:/cart";
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Order ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  @PostMapping("/order")
+  public String order() {
+    shopManager.placeOrder(auth.getUserId());
+
+    return "redirect:/profile";
+  }
 }

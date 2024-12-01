@@ -94,6 +94,11 @@ public class ShopManager {
     newItem.setQuantity(quantity);
     cartItemRepository.save(newItem);
   }
+  public void setCartItemQuantity(int quantity, long userId, long cartItemId) {
+    CartItem item = cartItemRepository.findByCartItemIdAndUser_UserId(cartItemId, userId);
+    item.setQuantity(quantity);
+    cartItemRepository.save(item);
+  }
   public CartItem getCartItem(long userId, long productId) {
     return cartItemRepository.findByUser_UserIdAndProduct_ProductId(userId, productId);
   }
@@ -122,6 +127,23 @@ public class ShopManager {
   // Order
   public Iterable<Order> getUserOrders(long userId) {
     return orderRepository.findByUser_UserId(userId);
+  }
+  public void placeOrder(long userId) {
+    List<CartItem> cartItems = cartItemRepository.findByUser_UserId(userId);
+
+    Order order = new Order();
+    order.setUser(userRepository.findById(userId).orElse(null));
+    orderRepository.save(order);
+
+    for (CartItem item : cartItems) {
+      OrderItem orderItem = new OrderItem();
+      orderItem.setOrder(order);
+      orderItem.setProduct(item.getProduct());
+      orderItem.setQuantity(item.getQuantity());
+      orderItemRepository.save(orderItem);
+    }
+
+    cartItemRepository.deleteAll(cartItems);
   }
 
   // OrderItem

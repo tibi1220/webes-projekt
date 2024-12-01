@@ -45,10 +45,25 @@
               ></span>
             </td>
             <td class="py-2 px-4 border-b">
-              <span
-                th:id="'quantity-' + ${cartItem.product.productId}"
-                th:text="${cartItem.quantity}"
-              ></span>
+              <!-- Dropdown from 1 to 10 -->
+              <form
+                th:action="@{/cart/update/{productId}/VALUE(productId=${cartItem.product.productId})}"
+                method="post"
+                th:object="${cartItem}"
+              >
+                <select
+                  name="quantity"
+                  class="w-16 border border-gray-200 rounded p-2 h-8"
+                  th:value="*{quantity}"
+                >
+                  <option
+                    th:each="i : ${#numbers.sequence(1, 10)}"
+                    th:value="${i}"
+                    th:text="${i}"
+                    th:selected="${i == cartItem.quantity}"
+                  ></option>
+                </select>
+              </form>
             </td>
             <td class="py-2 px-4 border-b">
               $<span
@@ -106,6 +121,15 @@
         </tfoot>
       </table>
 
+      <!-- Display if there are cart items -->
+      <div th:if="${cartItems.size() > 0}" class="flex justify-end">
+        <form th:action="@{/order}" method="post">
+          <button class="rounded bg-green-500 text-white px-4 py-2 mt-4">
+            Checkout
+          </button>
+        </form>
+      </div>
+
       <!-- Display only if there are no items -->
       <div th:unless="${cartItems.size() > 0}" class="text-center space-y-4">
         <p class="text-xl">No items in the cart</p>
@@ -117,4 +141,21 @@
 
     <footer th:replace="fragments/footer.html :: footer"></footer>
   </body>
+
+  <script>
+    // Auto submit form when quantity changes
+    document.querySelectorAll("select").forEach((select) => {
+      select.addEventListener("change", (e) => {
+        // Append new value to the form action
+        const newValue = e.target.value;
+
+        const form = e.target.parentElement;
+        const action = form.getAttribute("action");
+        const newAction = action.replace("VALUE", newValue);
+        form.setAttribute("action", newAction);
+
+        form.submit();
+      });
+    });
+  </script>
 </html>
