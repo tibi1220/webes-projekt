@@ -20,10 +20,15 @@ import webapp.services.ShopManager;
 @Controller
 public class ShopController {
   private final ShopManager shopManager;
+  private final AuthService auth;
 
   @Autowired
-  public ShopController(ShopManager shopManager) {
+  public ShopController(
+    ShopManager shopManager,
+    AuthService auth
+  ) {
     this.shopManager = shopManager;
+    this.auth = auth;
   }
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static pages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +37,6 @@ public class ShopController {
   public String about(
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     return "about";
@@ -42,7 +46,6 @@ public class ShopController {
   public String terms(
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     return "terms";
@@ -52,7 +55,6 @@ public class ShopController {
   public String privacyPolicy(
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     return "privacy-policy";
@@ -69,7 +71,6 @@ public class ShopController {
     Iterable<Product> products = shopManager.getProducts();
     model.addAttribute("products", products);
 
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     return "index";  // Name of the homepage template
@@ -85,7 +86,6 @@ public class ShopController {
     // BindingResult result,
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     Product product = shopManager.getProductById(productId);
@@ -107,8 +107,10 @@ public class ShopController {
   public String profile(
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
+
+    // auth.initializeUserContext();
+    System.out.println(auth.getUsername());
 
     return "profile";
   }
@@ -120,7 +122,6 @@ public class ShopController {
   public String cart(
     Model model
   ) {
-    AuthService auth = new AuthService(shopManager);
     model.addAttribute("auth", auth);
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -15,8 +15,9 @@
     >
       <form
         class="w-full sm:max-w-[460px] p-4 sm:border-2 rounded-xl flex flex-col gap-8"
-        action="/register"
+        th:action="@{/register}"
         method="post"
+        th:object="${user}"
       >
         <h1 class="font-bold text-3xl pb-4 border-b-2">Register</h1>
 
@@ -26,6 +27,7 @@
           th:value="${_csrf.token}"
         />
 
+        <!-- Email -->
         <div class="flex flex-col gap-2">
           <label for="email" class="font-semibold">Email Address</label>
           <input
@@ -35,10 +37,20 @@
             name="email"
             placeholder="email"
             autocomplete="email"
+            th:value="${user.email}"
             required
+            th:classappend="${#fields.hasErrors('email')} ? 'border-red-500'"
           />
+
+          <div
+            class="text-red-500 text-sm"
+            th:if="${#fields.hasErrors('email')}"
+          >
+            <p th:errors="*{email}"></p>
+          </div>
         </div>
 
+        <!-- Username -->
         <div class="flex flex-col gap-2">
           <label for="username" class="font-semibold">Username</label>
           <input
@@ -49,9 +61,19 @@
             placeholder="username"
             autocomplete="username"
             required
+            th:value="${user.username}"
+            th:classappend="${#fields.hasErrors('username')} ? 'border-red-500'"
           />
+
+          <div
+            class="text-red-500 text-sm"
+            th:if="${#fields.hasErrors('username')}"
+          >
+            <p th:errors="*{username}"></p>
+          </div>
         </div>
 
+        <!-- Password -->
         <div class="flex flex-col gap-2">
           <label for="password" class="font-semibold">Password</label>
           <input
@@ -65,6 +87,7 @@
           />
         </div>
 
+        <!-- Password again -->
         <div class="flex flex-col gap-2">
           <label for="confirmPassword" class="font-semibold">
             Confirm Password
@@ -101,6 +124,20 @@
     <footer th:replace="fragments/footer.html :: footer"></footer>
 
     <script>
+      // Remove error messages and reset red border when user interacts with input fields
+      document.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("input", () => {
+          // Remove red border when the user starts typing
+          input.classList.remove("border-red-500");
+
+          // Clear error message if there is one
+          const errorDiv = input.parentElement.querySelector(".text-red-500");
+          if (errorDiv) {
+            errorDiv.style.display = "none";
+          }
+        });
+      });
+
       // Check if the password and confirm password fields match
       const password = document.getElementById("password");
       const confirmPassword = document.getElementById("confirmPassword");
@@ -108,8 +145,22 @@
       confirmPassword.addEventListener("input", () => {
         if (password.value !== confirmPassword.value) {
           confirmPassword.setCustomValidity("Passwords do not match");
+          confirmPassword.classList.add("border-red-500");
+
+          // Add an error message if there isn't one
+          const errorDiv =
+            confirmPassword.parentElement.querySelector(".text-red-500");
+          if (errorDiv) {
+            errorDiv.style.display = "block";
+          } else {
+            const errorDiv = document.createElement("div");
+            errorDiv.classList.add("text-red-500", "text-sm");
+            errorDiv.textContent = "Passwords do not match";
+            confirmPassword.parentElement.appendChild(errorDiv);
+          }
         } else {
           confirmPassword.setCustomValidity("");
+          confirmPassword.classList.remove("border-red-500");
         }
       });
     </script>
