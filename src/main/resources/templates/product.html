@@ -21,9 +21,10 @@
           <h1 class="text-3xl font-bold" th:text="*{name}"></h1>
 
           <form
-            action="post"
+            method="post"
             th:action="@{/cart/add/{id}(id=${product.productId})}"
             th:if="${auth.user}"
+            th:object="${newCartItem}"
           >
             <button
               type="submit"
@@ -81,7 +82,7 @@
           <h2 class="text-xl font-semibold">Write your own review</h2>
 
           <form
-            th:action="@{/product/{id}/submitReview(id=${product.productId})}"
+            th:action="@{/product/{id}/review(id=${product.productId})}"
             th:object="${newReview}"
             method="post"
             class="space-y-4"

@@ -1,7 +1,7 @@
 -- Password is 'password'
 INSERT INTO "user" (username, email, password) VALUES 
   ('admin', 'admin@admin.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),
-  ('john_doe', 'john.doe@example.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),
+  ('alma', 'john.doe@example.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),
   ('jane_smith', 'jane.smith@example.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),
   ('alice_jones', 'alice.jones@example.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),
   ('bob_brown', 'bob.brown@example.com', '$2a$12$DuI772XaK4LYX.TR8Q57ae/WhFhGdjdy.qqSubnWQGV69LYOi3ani'),

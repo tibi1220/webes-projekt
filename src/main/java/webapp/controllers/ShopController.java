@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import webapp.entities.CartItem;
 import webapp.entities.Order;
@@ -83,17 +87,28 @@ public class ShopController {
   @GetMapping("/product/{productId}")
   public String product(
     @PathVariable("productId") long productId,
-    // @Valid Product product,
-    // BindingResult result,
     Model model
   ) {
-    model.addAttribute("auth", auth);
-
+    // Check if product exists
     Product product = shopManager.getProductById(productId);
 
     if (product == null) {
       return "redirect:/";
     }
+
+    // Check auth
+    model.addAttribute("auth", auth);
+
+    if(auth.getIsLoggedIn()) {
+      CartItem cartItem = new CartItem();
+
+      cartItem.setProduct(product);
+      cartItem.setQuantity(1);
+      cartItem.setUser(auth.getUser());
+
+      model.addAttribute("newCartItem", cartItem);
+    }
+
 
     model.addAttribute("product", product);
     
@@ -103,6 +118,20 @@ public class ShopController {
     model.addAttribute("newReview", new Review());
 
     return "product";
+  }
+
+  @PostMapping("/product/{productId}/review")
+  public String review(
+    @PathVariable("productId") long productId,
+    @Valid @ModelAttribute Review newReview
+  ) {
+    Product product = shopManager.getProductById(productId);
+    newReview.setProduct(product);
+    newReview.setUser(auth.getUser());
+
+    shopManager.addReview(newReview);
+
+    return "redirect:/product/" + productId;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -158,4 +187,72 @@ public class ShopController {
 
     return "cart";
   }
+
+  @PostMapping("/cart/add/{productId}")
+  public String addToCart(
+    @PathVariable("productId") long productId,
+    @Valid @ModelAttribute CartItem newCartItem
+  ) {
+    shopManager.updateCartItemQuantity(
+      auth.getUserId(), 
+      productId,
+      1,
+      true
+    );
+
+    return "redirect:/cart";
+  }
+
+  @PostMapping("/cart/increment/{productId}")
+  public String increment(
+    @PathVariable("productId") long productId,
+    @Valid @ModelAttribute CartItem cartItem
+  ) {
+    shopManager.updateCartItemQuantity(
+      auth.getUserId(), 
+      productId,
+      1,
+      true
+    );
+
+    return "redirect:/cart";
+  }
+
+  @PostMapping("/cart/decrement/{productId}")
+  public String decrement(
+    @PathVariable("productId") long productId,
+    @Valid @ModelAttribute CartItem cartItem
+  ) {
+    shopManager.updateCartItemQuantity(
+      auth.getUserId(), 
+      productId,
+      -1,
+      true
+    );
+
+    return "redirect:/cart";
+  }
+
+  @PostMapping("/cart/remove/{productId}")
+  public String deleteCartItem(
+    @PathVariable("productId") long productId,
+    @Valid @ModelAttribute CartItem cartItem
+  ) {
+    shopManager.updateCartItemQuantity(
+      auth.getUserId(), 
+      productId,
+      0,
+      false
+    );
+
+    return "redirect:/cart";
+  }
+
+  @PostMapping("/cart/remove-all")
+  public String deleteAllCartItem() {
+    shopManager.deleteAllCartItems(auth.getUserId());
+
+    return "redirect:/cart";
+  }
+
 }

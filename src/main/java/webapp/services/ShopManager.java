@@ -52,6 +52,51 @@ public class ShopManager {
   }
 
   // CartItem
+  public void addToCart(CartItem cartItem) {
+    cartItemRepository.save(cartItem);
+  }
+  public void updateCartItemQuantity(long userId, long productId, int quantity, boolean isIncrement) {
+    CartItem item = cartItemRepository.findByUser_UserIdAndProduct_ProductId(userId, productId);
+
+    if (item != null) {
+      // Check current quantity
+      int q = item.getQuantity();
+
+      // Only allow increment if the quantity is less than 10
+      if (isIncrement && q + quantity > 10) {
+        return;
+      }
+
+      // Only allow decrement if the quantity is greater than 1
+      if (isIncrement && q + quantity < 1) {
+        return;
+      }
+
+      // if not incrementing, and the quantity is 0, remove the item
+      if (!isIncrement && quantity == 0) {
+        cartItemRepository.delete(item);
+        return;
+      }
+
+      if (isIncrement) {
+        item.setQuantity(item.getQuantity() + quantity);
+      } else {
+        item.setQuantity(quantity);
+      }
+      cartItemRepository.save(item);
+
+      return;
+    }
+
+    CartItem newItem = new CartItem();
+    newItem.setUser(userRepository.findById(userId).orElse(null));
+    newItem.setProduct(productRepository.findById(productId).orElse(null));
+    newItem.setQuantity(quantity);
+    cartItemRepository.save(newItem);
+  }
+  public CartItem getCartItem(long userId, long productId) {
+    return cartItemRepository.findByUser_UserIdAndProduct_ProductId(userId, productId);
+  }
   public List<CartItem> getCartItemsByUserId(long userId) {
     return cartItemRepository.findByUser_UserId(userId);
   }
@@ -59,10 +104,8 @@ public class ShopManager {
     cartItemRepository.saveAll(cartItems);
   }
   public void deleteAllCartItems(long userId) {
-    cartItemRepository.deleteByUser_UserId(userId);
-  }
-  public void deleteCartItem(long userId, long productId) {
-    cartItemRepository.deleteByUser_UserIdAndProduct_ProductId(userId, productId);
+    List<CartItem> cartItems = cartItemRepository.findByUser_UserId(userId);
+    cartItemRepository.deleteAll(cartItems);
   }
 
   // Review
@@ -72,7 +115,7 @@ public class ShopManager {
   public Iterable<Review> getUserReviews(long productId) {
     return reviewRepository.findByProduct_ProductId(productId);
   }
-  public void saveReview(Review review) {
+  public void addReview(Review review) {
     reviewRepository.save(review);
   }
 
