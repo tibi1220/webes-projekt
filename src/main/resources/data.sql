@@ -89,11 +89,11 @@ INSERT INTO "cart_item" (product_id, user_id, quantity) VALUES
   (10, 20, 8); -- User 20 has 8 units of Product 2 in their cart
 
 INSERT INTO "order" (user_id, order_date) VALUES 
-  (2, '2024-11-23 10:15:00'),  -- Order by user with user_id 1
-  (2, '2024-11-22 14:45:00'),  -- Order by user with user_id 2
-  (3, '2024-11-21 16:30:00'),  -- Order by user with user_id 3
-  (3, '2024-11-20 11:00:00'),  -- Another order by user with user_id 1
-  (3, '2024-11-19 09:20:00');  -- Order by user with user_id 4
+  (1, '2024-11-23 10:15:00'),  -- Order by user with user_id 1
+  (1, '2024-11-22 14:45:00'),  -- Order by user with user_id 2
+  (1, '2024-11-21 16:30:00'),  -- Order by user with user_id 3
+  (1, '2024-11-20 11:00:00'),  -- Another order by user with user_id 1
+  (1, '2024-11-19 09:20:00');  -- Order by user with user_id 4
 
 INSERT INTO "order_item" (order_id, product_id, quantity) VALUES 
 (1, 1, 2),  -- 2 units of product with product_id 1 in order 1

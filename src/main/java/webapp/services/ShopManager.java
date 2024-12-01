@@ -66,7 +66,10 @@ public class ShopManager {
   }
 
   // Review
-  public Iterable<Review> getProductReview(long productId) {
+  public Iterable<Review> getProductReviews(long productId) {
+    return reviewRepository.findByProduct_ProductId(productId);
+  }
+  public Iterable<Review> getUserReviews(long productId) {
     return reviewRepository.findByProduct_ProductId(productId);
   }
   public void saveReview(Review review) {
@@ -74,8 +77,8 @@ public class ShopManager {
   }
 
   // Order
-  public Iterable<Order> getOrders() {
-    return orderRepository.findAll();
+  public Iterable<Order> getUserOrders(long userId) {
+    return orderRepository.findByUser_UserId(userId);
   }
 
   // OrderItem

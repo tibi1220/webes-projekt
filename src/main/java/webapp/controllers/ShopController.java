@@ -2,6 +2,8 @@ package webapp.controllers;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import webapp.entities.CartItem;
+import webapp.entities.Order;
 import webapp.entities.Product;
 import webapp.entities.Review;
 import webapp.services.AuthService;
@@ -94,7 +97,7 @@ public class ShopController {
 
     model.addAttribute("product", product);
     
-    Iterable<Review> reviews = shopManager.getProductReview(productId);
+    Iterable<Review> reviews = shopManager.getProductReviews(productId);
 
     model.addAttribute("reviews", reviews);
     model.addAttribute("newReview", new Review());
@@ -111,8 +114,20 @@ public class ShopController {
   ) {
     model.addAttribute("auth", auth);
 
-    // auth.initializeUserContext();
-    System.out.println(auth.getUsername());
+    Iterable<Review> reviews = shopManager.getUserReviews(auth.getUserId());
+    model.addAttribute("reviews", reviews);
+
+    Iterable<Order> orders = shopManager.getUserOrders(auth.getUserId());
+    model.addAttribute("orders", orders);
+    
+    List<BigDecimal> totals = StreamSupport
+      .stream(orders.spliterator(), false)
+      .map(order -> order.getOrderItems().stream()
+        .map(orderItem -> orderItem.getProduct().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
+        .reduce(BigDecimal.ZERO, BigDecimal::add)
+      )
+      .collect(Collectors.toList());
+    model.addAttribute("totals", totals);
 
     return "profile";
   }

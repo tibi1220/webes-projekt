@@ -21,6 +21,7 @@ public class AuthService {
   private int cartItems;
   private String username;
   private long userId;
+  private User user;
 
   public AuthService(ShopManager shopManager, CartItemService cartItemService) {
     this.shopManager = shopManager;
@@ -28,7 +29,7 @@ public class AuthService {
     initializeUserContext();
   }
 
-  public void initializeUserContext() {
+  private void initializeUserContext() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (
@@ -40,6 +41,7 @@ public class AuthService {
       this.isLoggedIn = true;
 
       Optional<User> user = shopManager.getUserByUsername(username);
+      this.user = user.orElse(null);
 
       if (user.isPresent()) {
         this.userId = user.get().getUserId();
@@ -74,5 +76,9 @@ public class AuthService {
 
   public long getUserId() {
     return this.userId;
+  }
+
+  public User getUser() {
+    return this.user;
   }
 }

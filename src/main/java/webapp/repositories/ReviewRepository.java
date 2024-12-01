@@ -10,5 +10,6 @@ import webapp.entities.Review;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
   List<Review> findByProduct_ProductId(long productId);
+  List<Review> findByUser_UserId(long userId);
 }
 
